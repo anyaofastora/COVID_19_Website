@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zxx">
+{% load static %}
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Covid19_Confirmed Case Map</title>
+		<link rel="icon" href="images/favicon.png">
+
+		<link rel="stylesheet" href="{% static './css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static './css/fontawesome.min.css' %}">
+		<link rel="stylesheet" href="{% static './css/fakeLoader.min.css' %}">
+		<link rel="stylesheet" href="{% static './css/hoverbuttons.css' %}">
+		<link rel="stylesheet" href="{% static './css/magnific-popup.css' %}">
+		<link rel="stylesheet" href="{% static './css/style.css' %}">
+<!--		<link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">-->
+		<script src="{% static './js/jquery.min.js' %}"></script>
+<!--		<script src="https://code.jquery.com/jquery-migrate-3.3.2.js"></script>-->
+<!--		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>-->
+		<script src="{% static './js/bootstrap.min.js' %}"></script>
+<!--		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+<!--		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>-->
+		  <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.css" rel="stylesheet">
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.js"></script>
+
+	</head>
+	<body>
+		<!-- loader -->
+		<!-- end loader -->
+
+		<!-- navbar -->
+		<nav class="navbar navbar-expand-md fixed-top">
+			<div class="container">
+				<a href="/confirmed-case-map/" class="navbar-brand">COVID19 Risk Map</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<i class="fa fa-bars"></i>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="/county_confirmed-case-map/" id="Confirmed-county">Confirmed Cases Map(County)</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/confirmed-case-map/" id="Confirmed">Confirmed Cases Map(Metro)</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/labeled-risk-map/" id="Labeled">New Cases Map</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/high-level-map/" id="High-level">Metro-level Risk Map</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/low-level-map/" id="Risk">Risk Estimation Heat Map</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- end navbar -->
+
+		<!-- header-title -->
+		<!-- end header-title -->
+		<!-- about -->
+		<div class="bg-grey section-top" style="padding:0,0,0,0">
+			<div class="container">
+				<a>Source of Algorithm: </a>
+				</br>
+				<a>Q. Wang, Y. Guo, T. Ji, X. Wang, B. Hu and P. Li, "Toward Combatting COVID-19: A Risk Assessment System," in IEEE Internet of Things Journal, vol. 8, no. 21, pp. 15953-15964, 1 Nov.1, 2021, doi: 10.1109/JIOT.2021.3070042.</a>
+				</br>
+				<a>Data source: </a>
+				</br>
+				<a>New York Times: </a><a href="https://github.com/nytimes/covid-19-data">https://github.com/nytimes/covid-19-data</a>
+				</br>
+				<a>Covid ActNow: </a><a href="https://covidactnow.org/">https://covidactnow.org/</a>
+				</br>
+				<a>Please feel free to cite it in your work.</a>
+			</div>
+		</div>
+		<div class="about bg-grey section-middle" style="height:900px">
+
+			<div class="container" style="height:100%">
+<!--				<input id="date" type="date" value="{{last_date}}" v-model="date" onchange="datechange()" style="width:300px">-->
+				<div class = "row" style="padding:10px">
+<!--				<input id="date" type="date" value="{{last_date}}" v-model="date" onchange="datechange()" style="width:300px">-->
+					<div class = "col-sm-12 col-md-6">
+						<span> Date: </span>
+						<input type='text' id="datepicker" onchange="datechange()" style="width:100%">
+					</div>
+					<div class = "col-sm-12 col-md-6">
+						<span> State: </span>
+						<select class = "dropbox" list="state_list" id="state" onchange="datechange()" style="width:100%" >
+							<option value="AL">AL</option>
+							<option value="AK">AK</option>
+							<option value="AZ">AZ</option>
+							<option value="AR">AR</option>
+							<option value="CA">CA</option>
+							<option value="CO">CO</option>
+							<option value="CT">CT</option>
+							<option value="DE">DE</option>
+							<option value="DC">DC</option>
+							<option value="FL">FL</option>
+							<option value="GA">GA</option>
+							<option value="HI">HI</option>
+							<option value="ID">ID</option>
+							<option value="IL">IL</option>
+							<option value="IN">IN</option>
+							<option value="IA">IA</option>
+							<option value="KS">KS</option>
+							<option value="KY">KY</option>
+							<option value="LA">LA</option>
+							<option value="ME">ME</option>
+							<option value="MD">MD</option>
+							<option value="MA">MA</option>
+							<option value="MI">MI</option>
+							<option value="MN">MN</option>
+							<option value="MS">MS</option>
+							<option value="MO">MO</option>
+							<option value="MT">MT</option>
+							<option value="NE">NE</option>
+							<option value="NV">NV</option>
+							<option value="NH">NH</option>
+							<option value="NJ">NJ</option>
+							<option value="NM">NM</option>
+							<option value="NY">NY</option>
+							<option value="NC">NC</option>
+							<option value="ND">ND</option>
+							<option value="OH">OH</option>
+							<option value="OK">OK</option>
+							<option value="OR">OR</option>
+							<option value="PA">PA</option>
+							<option value="RI">RI</option>
+							<option value="SC">SC</option>
+							<option value="SD">SD</option>
+							<option value="TN">TN</option>
+							<option value="TX">TX</option>
+							<option value="UT">UT</option>
+							<option value="VT">VT</option>
+							<option value="VA">VA</option>
+							<option value="WA">WA</option>
+							<option value="WV">WV</option>
+							<option value="WI">WI</option>
+							<option value="WY">WY</option>
+						</select>
+					</div>
+				</div>
+				<div class="row no-gutters" id="confirmed_case_map" style="height:100%;width:100%">
+				</div>
+			</div>
+		</div>
+
+		<!-- emd about -->
+
+		<!-- testimonial -->
+
+		<!-- end testimonial -->
+
+		<!-- footer -->
+		<footer class="section">
+			<div class="container">
+				<p>COVID19 Risk Map</p>
+			</div>
+		</footer>
+		<!-- end footer -->
+
+		<!-- script -->
+
+		<script async
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP8-UnjF4N7GZ4dFrvQUNKzd1D8oeVHZE&libraries=visualization&callback=initMap">
+		</script>
+		<script>
+		var heat_map;
+		var map;
+		var availableDates;
+		var availableStates;
+		var center;
+		var gradient = [];
+		var gradient_num = 500;
+		var heatmap_data;
+		var start_lat=0;
+		var start_lon=0;
+		var step_lat=0;
+		var step_lon=0;
+		var risk_marker;
+		var lon_len;
+		function addHeatPoint(data) {
+			//console.log(data);
+			var heat_points = [];
+			for(i=0;i<data["count"];i++)
+			{
+			//console.log(i)
+			//if (data["weight"][i]==0)
+			//data["weight"][i] = 0.000001;
+				heat_points.push({location: new google.maps.LatLng(data["latitude"][i], data["longitude"][i]), weight: data["weight"][i]});};
+			//heat_points.push({location: new google.maps.LatLng(41, -83), weight: 10})
+			//console.log(heat_points);
+			heatmap_temp = new google.maps.visualization.HeatmapLayer({
+			 	map: map,
+			 	data:heat_points,
+			 	dissipating: 1,
+			 	gradient:gradient,
+			 	radius:4.5,
+
+  			});
+  			heatmap_temp.setMap(map);
+  			heat_map = heatmap_temp;
+		};
+
+		function initMap() {
+			const myLatLng = { lat: 41, lng: -83 };
+			const temp_map = new google.maps.Map(document.getElementById("confirmed_case_map"), {
+			  zoom: 7,
+			  center: myLatLng,
+			});
+
+			map = temp_map
+			const myLatlng = { lat: -25.363, lng: 131.044 };
+			let infoWindow = new google.maps.InfoWindow();
+
+
+			// Configure the click listener.
+			map.addListener("click", (mapsMouseEvent) => {
+			// Close the current InfoWindow.
+			infoWindow.close();
+
+			// Create a new InfoWindow.
+			infoWindow = new google.maps.InfoWindow({
+			  position: mapsMouseEvent.latLng,
+			});
+			infoWindow.setContent(get_risk_data(mapsMouseEvent.latLng.toJSON())
+			);
+			infoWindow.open(map);
+			});
+
+			heatmap_temp = new google.maps.visualization.HeatmapLayer({
+			 	map: map,
+  			});
+  			heatmap_temp.setMap(map);
+  			heat_map = heatmap_temp;
+		}
+
+		function datechange(){
+			var date=$('#datepicker').val();
+			var state=$('#state').val();
+			$.ajax(
+			{
+			type:"GET",
+			url:"/dataprocess/",
+			data:{
+				"command":"get_heatmap_points",
+				"date":date,
+				"state":state,
+				},
+			success: function(data){
+			heat_map.setMap(null);
+			data = eval("(" + data + ")");
+			heatmap_data = data;
+			addHeatPoint(data);
+
+			start_lat = heatmap_data["latitude"][0];
+			start_lon = heatmap_data["longitude"][1];
+			//step_lat = heatmap_data["latitude"][150]-heatmap_data["latitude"][0];
+			step_lon = heatmap_data["longitude"][1]-heatmap_data["longitude"][0];
+
+			for(i=1;i<20000;i++)
+			{
+				//console.log(heatmap_data["latitude"][i])
+				if(heatmap_data["latitude"][i]!=heatmap_data["latitude"][i-1])
+				{step_lat = heatmap_data["latitude"][i] - heatmap_data["latitude"][i-1];
+				lon_len = i;
+				lat_len = heatmap_data["latitude"].length/i;
+				break;}
+			}
+
+			var coord = data["state_coord"];
+			map.setCenter({lat: coord[0], lng: coord[1]});
+			}
+			}
+			)
+			};
+
+
+
+
+		function unavailable(date) {
+			dmy = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+			if ($.inArray(dmy, availableDates) == -1) {
+				return [false, "", "Unavailable"];
+			} else {
+				return [true, ""];
+			}
+		}
+
+
+		  $(document).ready(function() {
+
+		  	$("#Risk").css("background", "#ff8100");
+		  	$("#Risk").css("border-radius", "15px");
+
+			$.ajax(
+				{
+				type:"GET",
+				url:"/dataprocess/",
+				data:{
+					"command":"start_up_heatmap",
+					"map_type":"heatmap",
+					},
+				success: function(data){
+						data = eval("(" + data + ")");
+						//console.log(availableDates);
+						//console.log(data);
+						availableDates=data["availableDate"];
+						availableStates=data["availableState"];
+						for(i=0;i<data["count"];i++)
+						{
+							$("#state").append('<option value="'+availableStates[i]+'">'+availableStates[i]+'</option>');
+						}
+					}
+				}
+
+			)
+
+
+			$("#datepicker").datepicker({
+					dateFormat: 'yy-mm-dd',
+					beforeShowDay: unavailable
+
+			});
+
+			gradient.push('rgba(0,255,0,0)')
+			for(i=1;i<=gradient_num;i++)
+			{
+				gradient.push('rgba('+parseInt(i*255/gradient_num).toString()+',255,0,0.6)')
+			}
+			gradient.push('rgba(255,255,0,0.6)')
+			for(i=1;i<=gradient_num;i++)
+			{
+				gradient.push('rgba(255,'+parseInt(255-i*255/gradient_num).toString()+',0,0.6)')
+			}
+			gradient.push('rgba(255,0,0,0.6)')
+			console.log(gradient);
+		  });
+
+
+
+		function placeMarker(location) {
+			risk_data = get_risk_data(location);
+			var marker = new google.maps.Marker({
+				position: location,
+				map: map
+			});
+		}
+		function get_risk_data(json){
+			lat = json["lat"];
+			lon = json["lng"];
+			lat_ind = parseInt((lat-start_lat)/step_lat);
+			lon_ind = parseInt((lon-start_lon)/step_lon);
+			//console.log("#");
+
+			//console.log(lat_ind);
+			//console.log(lon_ind);
+			if(lat_ind>0)
+			if(lon_ind>0)
+			if (lat_ind<lat_len)
+			if(lon_ind<lon_len)
+			{//console.log(toString(heatmap_data["weight"][lat_ind*lon_len+lon_ind]));
+					return heatmap_data["weight"][lat_ind*lon_len+lon_ind].toString();}
+			return "0";
+		}
+		</script>
+	</body>
+<script>
+
+</script>
+</html>
